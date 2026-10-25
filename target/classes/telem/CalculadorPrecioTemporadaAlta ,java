@@ -1,0 +1,32 @@
+
+
+package telem;
+import java.time.LocalDate; //vi que esta clase es menos obsoleta
+import telem.GestorAlquileres;
+import java.time.temporal.ChronoUnit; 
+import telem.Alquiler;
+public class CalculadorPrecioTemporadaAlta implements IcalculadorPrecio {
+
+    @Override
+    public int calcularPrecioAlquiler(Alquiler alquiler) {
+        int precio;
+
+         LocalDate x = alquiler.getFechaInicio();
+        LocalDate y = alquiler.getFechaFin();
+
+        int alquilerActual = alquiler.calcularPrecioAlquiler(x, y);
+       if (x.getMonthValue() == 6 ||
+           x.getMonthValue() == 7 ||
+           x.getMonthValue() == 8 ||
+         x.getMonthValue() == 12 ){
+        
+     
+        precio = 2*alquilerActual;
+         return precio;
+
+       }
+        return alquilerActual;
+    
+      }
+
+}
