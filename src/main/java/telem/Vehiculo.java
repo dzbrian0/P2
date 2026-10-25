@@ -43,6 +43,12 @@ public abstract class Vehiculo {
     @Override 
     public String toString() {
         return new JSONObject(this).toString();
+
+
+        json.put("tipo", this.getClass().getSimpleName());
+
+    return json.toString();
+}
     }
 
 }
