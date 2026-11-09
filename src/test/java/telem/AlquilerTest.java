@@ -18,5 +18,20 @@ public class AlquilerTest {
         
         assertEquals(150, alquiler.calcularPrecioAlquiler(inicio, fin));
     }
+
+    @Test
+    public void testDeserializacion() {
+        Turismo turismo = new Turismo("1234ABC", Categoria.NORMAL, 2020, 5, 400.0);
+        Cliente cliente = new Cliente("Juan", "12345678A");
+
+        Alquiler alquiler = new Alquiler(turismo, cliente, new Date(0), new Date(86400000L)); //86400000L representan los ms de un día, L indica que es un num del tipo long.
+
+        String json = alquiler.toString();
+        Alquiler recuperado = new Alquiler(json);
+
+        assertEquals("Juan", recuperado.getCliente().getNombre());
+        assertEquals("Turismo", recuperado.getVehiculo().getTipo());
+        assertEquals(86400000L, recuperado.getFechaFin().getTime());
+    }
     
 }
