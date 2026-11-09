@@ -28,6 +28,15 @@ public class Alquiler {
         this.fechaFin = fechaFin;
     }
 
+    //Deserializamos
+    public Alquiler(String jsonString) {
+        JSONObject json = new JSONObject(jsonString);
+        this.cliente = new Cliente(json.getJSONObject("cliente").toString());
+        this.vehiculo = FactoriaVehiculos.getVehiculo(json.getJSONObject("vehiculo").toString());
+        this.fechaInicio = new Date(json.getLong("fechaInicio"));
+        this.fechaFin = new Date(json.getLong("fechaFin"));
+    }
+
     public static Alquiler[] obtenerAlquileres() {
         return alquileres; 
     }
@@ -62,9 +71,13 @@ public class Alquiler {
         return dias * PRECIO_BASE;
     }
 
+    //Serializamos
     @Override 
     public String toString() {
-        return new JSONObject(this).toString();
+        JSONObject json = new JSONObject(this);
+        json.put("fechaInicio", fechaInicio.getTime());
+        json.put("fechaFin", fechaFin.getTime());
+        return json.toString();
     }
 
     public static void main(String[] args) {
@@ -74,7 +87,15 @@ public class Alquiler {
         Alquiler alquiler1 = new Alquiler(vehiculo1, cliente1, new Date(), new Date(System.currentTimeMillis() + 3 * 24 * 60 * 60 * 1000)); // Alquiler de 3 días
         
         System.out.println(alquiler1.toString());
-        System.out.println("--------------------------------------------------------");
+        //Lo serializamos
+        String json = alquiler1.toString();
+
+        //Lo deserializamos
+        Alquiler recuperado = new Alquiler(json);
+
+        //Comprobamos que efectivamente recuperamos los datos de ese cliente y vehiculo
+        System.out.println("Cliente recuperado: " + recuperado.getCliente().getNombre());
+        System.out.println("Vehiculo recuperado: " + recuperado.getVehiculo().getTipo());
 
         Vehiculo vehiculo2 = new VehiculoIndustrial("ABC123", Categoria.NORMAL, 2020, 1000, 3);
         Alquiler alquiler2 = new Alquiler(vehiculo2, cliente1, new Date(), new Date(System.currentTimeMillis() + 3 * 24 * 60 * 60 * 1000)); // Alquiler de 3 días
