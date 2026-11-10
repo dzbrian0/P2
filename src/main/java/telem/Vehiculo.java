@@ -19,6 +19,7 @@ public abstract class Vehiculo {
         this.matricula = matricula;
         this.categoria = categoria;
         this.annio = annio;
+        this.disponible = true; // Inicialmente, el vehículo está disponible
     }
 
     public String getMatricula() {
@@ -40,6 +41,13 @@ public abstract class Vehiculo {
     public void setDisponible(boolean disponible) {
         this.disponible = disponible;
     }
+
+    public String getTipo(){
+                 
+        String tipo = this.getClass().getSimpleName();
+
+return tipo ;
+    } 
 
     @Override 
     public String toString() {

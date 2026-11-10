@@ -3,7 +3,6 @@ package telem;
 import java.time.LocalDate; //vi que esta clase es menos obsoleta
 import telem.GestorAlquileres;
 import java.time.temporal.ChronoUnit; 
-import telem.GestorAlquileres;
 import telem.Alquiler;
 
 

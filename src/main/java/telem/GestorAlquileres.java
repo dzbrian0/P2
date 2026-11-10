@@ -7,6 +7,8 @@ public class GestorAlquileres {
     private int contadorAlquileres = 0;
     private Alquiler[] alquileres = new Alquiler[1000];
 
+    private Alquiler alquiler;
+
     // Para simplificar, vamos a definir un array de clientes y 
     // otro de vehículos dentro del gestor.
     // En una aplicación real estarían en una base de datos.
@@ -55,7 +57,7 @@ public class GestorAlquileres {
 
         for (Vehiculo vehiculo : vehiculos) {
             if (vehiculo != null) {
-                if (vehiculo.getTipo().equals(tipo)) {
+                if (vehiculo.getTipo().equals(tipo)  && vehiculo.isDisponible()) {
                     vehiculosFiltrados[contador++] = vehiculo;
                 }
             }
@@ -75,12 +77,27 @@ public class GestorAlquileres {
      */
     public Vehiculo[] obtenerVehiculos(String tipo, Categoria categoria) {
 
-        System.out.println("GestorAlquileres: obtenerVehiculos(tipo, categoria): método no implementado");
+    Vehiculo[] vehiculosFiltrados = new Vehiculo[vehiculos.length];
+    int contador = 0;
 
-        // Para hacer.
+    for (Vehiculo vehiculo : vehiculos) {
+        if (vehiculo != null) {
 
-        return null;
+            if (vehiculo.getTipo().equals(tipo)
+                    && vehiculo.isDisponible()
+                    && vehiculo.getCategoria() == categoria) {
+
+                vehiculosFiltrados[contador++] = vehiculo;
+            }
+        }
     }
+
+    // Ajustar el tamaño del array
+    Vehiculo[] resultado = new Vehiculo[contador];
+    System.arraycopy(vehiculosFiltrados, 0, resultado, 0, contador);
+
+    return resultado;
+}
 
     /////////////////////////////////////////////////////////////////////////////////////
     // MÉTODOS PARA GESTIONAR ALQUILERES
@@ -96,6 +113,7 @@ public class GestorAlquileres {
         } else {
             System.out.println("No se pueden agregar más alquileres. Capacidad máxima alcanzada.");
         }
+    
     }
 
     /**
@@ -108,26 +126,31 @@ public class GestorAlquileres {
 
     public Alquiler[] obtenerAlquileres(Cliente cliente) {
 
-        System.out.println("GestorAlquileres: obtenerAlquileres(cliente): método no implementado");
 
-        return null;
+        Alquiler[] alquileresCliente = new Alquiler[alquileres.length];
+        int contador = 0;
+
+        for (Alquiler alquiler : alquileres) {
+            if (alquiler != null && alquiler.getCliente().equals(cliente)) {
+                alquileresCliente[contador++] = alquiler;
+            }
+        }
+        // Ajustar el tamaño del array para que solo contenga los alquileres encontrados
+        Alquiler[] resultado = new Alquiler[contador];
+        System.arraycopy(alquileresCliente, 0, resultado, 0, contador);
+        return resultado;
     }
 
+  
 
-    /**
-     * Informa si un cliente es cliente frecuente en función del número de alquileres previos.
-     * @param cliente cliente a evaluar
-     * @param umbral número mínimo de alquileres previos que se consideran para determinar si es cliente frecuente
-     * @return
-     */
-    private boolean esClienteFrecuente(Cliente cliente, int umbral) {
+    public boolean esClienteFrecuente(Cliente cliente, int umbral) {
 
-        System.out.println("GestorAlquileres: esClienteFrecuente(cliente, umbral): método no implementado");
- 
-        // Para hacer.
         
-        return false; 
-    }
+
+          Alquiler[] alquileresCliente = obtenerAlquileres(cliente);
+
+               return alquileresCliente.length > umbral;
+            }
 
 
     /////////////////////////////////////////////////////////////////////////////////////
@@ -181,6 +204,8 @@ public class GestorAlquileres {
                             Alquiler q = new Alquiler(v, cliente, inicio, fin);
                             this.agregarAlquiler(q);
 
+                            v.setDisponible(false);
+
                             // Calculamos precio.
                             // Aquí habría que determinar la política de precios aplicable según el tipo de cliente y la fecha.
                             // Para simplificar, se aplicará la política de cliente frecuente si el cliente tiene más de 3 alquileres previos, 
@@ -190,18 +215,28 @@ public class GestorAlquileres {
                             // la tarifa que le corresponde.
                             boolean usuarioFrecuente = this.esClienteFrecuente(cliente, 3);
 
-                            if (usuarioFrecuente){
+                            IcalculadorPrecio calculador;
 
-                                // aplicamos tarifa de cliente frecuente.
-                                System.out.println("Alquiler realizado. Tarifa Usuario frecuente.");
-                                // Para completar ...
-                            }
-                            else{
-                                // aplicamos tarifa normal.
-                                System.out.println("Alquiler realizado. Tarifa Normal.");
+if (usuarioFrecuente) {
 
-                                // Para completar ...
-                            }
+    System.out.println("Alquiler realizado. Tarifa Usuario frecuente.");
+
+    calculador = FactoriaPoliticasPrecio.crearPolitica(
+        PoliticasDePrecios.ClienteFrecuente
+    );
+
+} else {
+
+    System.out.println("Alquiler realizado. Tarifa Normal.");
+
+    calculador = FactoriaPoliticasPrecio.crearPolitica(
+        PoliticasDePrecios.Normal
+    );
+}
+
+int precio = calculador.calcularPrecioAlquiler(q);
+
+System.out.println("Precio del alquiler: " + precio + " €");
                             
                         }
                         else{
@@ -284,7 +319,7 @@ public class GestorAlquileres {
                     break;
                 case 3:
                     System.out.println("Ha seleccionado Vehículo Industrial.");
-                    tipo = "VehículoIndustrial";
+                    tipo = "VehiculoIndustrial";
                     break;
                 default:
                     System.out.println("Opción inválida. Por favor, seleccione un tipo de vehículo válido.");
@@ -316,17 +351,16 @@ public class GestorAlquileres {
                     elegibles = obtenerVehiculos(tipo, Categoria.ESPECIAL);
                     break; // Volver a pedir la selección
             }
-
             System.out.println("Coches elegibles");
 
             for(int i = 0; i < elegibles.length; i++){
                 System.out.println(i + " ---> " + elegibles[i]);
             }
 
-            System.out.println("Introduzca número coche (sólo si está disponible)");
             int seleccion = KeyBoard.readInt();
-            vehiculo = elegibles[seleccion];
-            seleccionado = true;
+vehiculo = elegibles[seleccion];
+seleccionado = true;
+
         }
         return vehiculo;
     }
