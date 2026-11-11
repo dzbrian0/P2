@@ -3,7 +3,7 @@ package telem;
 
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
-import java.util.Date;
+import java.time.LocalDate;
 
 public class GestorAlquileresTest {
 
@@ -13,7 +13,9 @@ public class GestorAlquileresTest {
 
         Turismo turismo = new Turismo("1234ABC", Categoria.NORMAL, 2020, 5, 400.0);
         Cliente cliente = new Cliente("Juan", "12345678A");
-        Alquiler alquiler = new Alquiler(turismo, cliente, new Date(0), new Date(86400000L));
+        Alquiler alquiler = new Alquiler(turismo, cliente, LocalDate.of(1970, 1, 1), LocalDate.of(1970, 1, 2));
+                    
+       
 
         gestor.agregarAlquiler(alquiler);
         gestor.guardarAlquileres("prueba-alquileres.json");

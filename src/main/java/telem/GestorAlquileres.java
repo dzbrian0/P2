@@ -1,6 +1,6 @@
 package telem;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.io.FileWriter;
 import java.io.IOException;
 import org.json.JSONArray;
@@ -12,8 +12,6 @@ public class GestorAlquileres {
     
     private int contadorAlquileres = 0;
     private Alquiler[] alquileres = new Alquiler[1000];
-
-    private Alquiler alquiler;
 
     // Para simplificar, vamos a definir un array de clientes y 
     // otro de vehículos dentro del gestor.
@@ -238,8 +236,8 @@ public class GestorAlquileres {
                             // y el usuario especifica duración en días.
                             System.out.println("¿cuántos días desea alquilar el vehículo?");
                             int dias = KeyBoard.readInt();
-                            Date inicio = new Date();
-                            Date fin = new Date(inicio.getTime() + dias * 86400000L);
+                            LocalDate inicio = LocalDate.now();
+                            LocalDate fin = inicio.plusDays(dias);
 
                             // Creamos y registramos el alquiler
                             Alquiler q = new Alquiler(v, cliente, inicio, fin);

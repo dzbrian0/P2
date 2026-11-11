@@ -2,7 +2,7 @@ package telem;
 
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
-import java.util.Date;
+import java.time.LocalDate;
 
 public class AlquilerTest {
 
@@ -11,8 +11,8 @@ public class AlquilerTest {
         Turismo turismo = new Turismo("1234abc", Categoria.NORMAL, 2020, 5, 400.0);
         Cliente cliente = new Cliente("Juan", "12345678a");
 
-        Date inicio = new Date(0);
-        Date fin = new Date(3L*24*60*60*1000);
+        LocalDate inicio = LocalDate.of(1970, 1, 1);
+        LocalDate fin = inicio.plusDays(3);
 
         Alquiler alquiler = new Alquiler(turismo, cliente, inicio, fin);
         
@@ -24,14 +24,15 @@ public class AlquilerTest {
         Turismo turismo = new Turismo("1234ABC", Categoria.NORMAL, 2020, 5, 400.0);
         Cliente cliente = new Cliente("Juan", "12345678A");
 
-        Alquiler alquiler = new Alquiler(turismo, cliente, new Date(0), new Date(86400000L)); //86400000L representan los ms de un día, L indica que es un num del tipo long.
+        Alquiler alquiler = new Alquiler(turismo, cliente, LocalDate.of(1970, 1, 1), LocalDate.of(1970, 1, 2));
 
         String json = alquiler.toString();
+
         Alquiler recuperado = new Alquiler(json);
 
         assertEquals("Juan", recuperado.getCliente().getNombre());
         assertEquals("Turismo", recuperado.getVehiculo().getTipo());
-        assertEquals(86400000L, recuperado.getFechaFin().getTime());
+        assertEquals(LocalDate.of(1970, 1, 2), recuperado.getFechaFin());
     }
     
 }
