@@ -33,8 +33,6 @@ public class Cliente {
     @Override 
     public String toString() {
         return new JSONObject(this).toString();
-
-       
     }
 
     public static void main(String[] args) {
