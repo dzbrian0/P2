@@ -1,6 +1,12 @@
 package telem;
 
-import java.time.LocalDate;
+import java.util.Date;
+import java.io.FileWriter;
+import java.io.IOException;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import java.io.FileReader;
+import org.json.JSONTokener;
 
 public class GestorAlquileres {
     
@@ -124,6 +130,41 @@ public class GestorAlquileres {
         return alquileres; 
     }
 
+    //Guardamos los alquileres en un archivo JSON
+    public void guardarAlquileres(String ruta) {
+        JSONArray lista = new JSONArray();
+
+        for(int i = 0; i < contadorAlquileres; i++){
+            lista.put(new JSONObject(alquileres[i].toString()));
+        }
+
+        try (FileWriter archivo = new FileWriter(ruta)) {
+            archivo.write(lista.toString());
+        }
+        catch (IOException e) {
+            System.out.println("Error al guardar los alquileres: " + e.getMessage());
+        }
+    }
+
+    //Cargamos los alquileres del archivo JSON
+    public void cargarAlquileres(String ruta) {
+        try(FileReader archivo = new FileReader(ruta)) {
+            JSONArray lista = new JSONArray(new JSONTokener(archivo));
+
+            alquileres = new Alquiler[1000];
+            contadorAlquileres = 0;
+
+            for(int i = 0; i < lista.length(); i++) {
+                Alquiler alquiler = new Alquiler(lista.getJSONObject(i).toString());
+                agregarAlquiler(alquiler);
+            }
+
+        }
+        catch (IOException e) {
+            System.out.println("Error al cargar los alquileres: " + e.getMessage());
+        }
+    }
+
     public Alquiler[] obtenerAlquileres(Cliente cliente) {
 
 
@@ -197,8 +238,8 @@ public class GestorAlquileres {
                             // y el usuario especifica duración en días.
                             System.out.println("¿cuántos días desea alquilar el vehículo?");
                             int dias = KeyBoard.readInt();
-                            LocalDate inicio = LocalDate.now();
-                            LocalDate fin = inicio.plusDays(dias);
+                            Date inicio = new Date();
+                            Date fin = new Date(inicio.getTime() + dias * 86400000L);
 
                             // Creamos y registramos el alquiler
                             Alquiler q = new Alquiler(v, cliente, inicio, fin);

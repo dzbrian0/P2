@@ -29,6 +29,15 @@ public class Alquiler {
         this.fechaFin = fechaFin;
     }
 
+    //Deserializamos
+    public Alquiler(String jsonString) {
+        JSONObject json = new JSONObject(jsonString);
+        this.cliente = new Cliente(json.getJSONObject("cliente").toString());
+        this.vehiculo = FactoriaVehiculos.getVehiculo(json.getJSONObject("vehiculo").toString());
+        this.fechaInicio = LocalDate.parse(json.getString("fechaInicio"));
+        this.fechaFin = LocalDate.parse(json.getString("fechaFin"));
+    }
+
     public static Alquiler[] obtenerAlquileres() {
         return alquileres; 
     }
@@ -63,9 +72,13 @@ public class Alquiler {
     return dias * PRECIO_BASE;
 }
 
+    //Serializamos
     @Override 
     public String toString() {
-        return new JSONObject(this).toString();
+        JSONObject json = new JSONObject(this);
+        json.put("fechaInicio", fechaInicio.toString());
+        json.put("fechaFin", fechaFin.toString());
+        return json.toString();
     }
 
    public static void main(String[] args) {

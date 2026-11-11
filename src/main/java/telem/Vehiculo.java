@@ -42,16 +42,24 @@ public abstract class Vehiculo {
         this.disponible = disponible;
     }
 
-    public String getTipo(){
-                 
-        String tipo = this.getClass().getSimpleName();
 
-return tipo ;
-    } 
+    public String getTipo() {
+     String tipo = this.getClass().getSimpleName();
+     return tipo;
+    }
 
-    @Override 
-    public String toString() {
+    //Serializamos
+     @Override
+     public String toString() {
         return new JSONObject(this).toString();
     }
 
+         //Deserializamos
+     public Vehiculo(String jsonString) {
+       JSONObject json = new JSONObject(jsonString);
+       this.matricula = json.getString("matricula");
+       this.categoria = Categoria.valueOf(json.getString("categoria"));
+       this.annio = json.getInt("annio");
+       this.disponible = json.getBoolean("disponible");
+    }
 }
