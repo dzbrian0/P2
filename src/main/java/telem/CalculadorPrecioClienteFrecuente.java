@@ -3,7 +3,6 @@ package telem;
 import java.time.LocalDate; //vi que esta clase es menos obsoleta
 import telem.GestorAlquileres;
 import java.time.temporal.ChronoUnit; 
-import telem.GestorAlquileres;
 import telem.Alquiler;
 
 
@@ -22,7 +21,7 @@ public class CalculadorPrecioClienteFrecuente implements IcalculadorPrecio{
           //para el tiempo de alquiler uso el método chronoUnit, indicado en la guía.
         int TiempodeAlquiler = (int) ChronoUnit.DAYS.between(x, y);
 Cliente cliente = alquiler.getCliente();
-int umbral = 7; //umbral de días para aplicar el descuento
+int umbral = 3; //umbral de días para aplicar el descuento
         int alquilerActual = alquiler.calcularPrecioAlquiler(x, y);
                  if (gestor.esClienteFrecuente(cliente, umbral) == 
                 true) {

@@ -1,4 +1,5 @@
-package telem;
+package 
+telem;
 
 import org.json.JSONObject;
 
@@ -18,6 +19,7 @@ public abstract class Vehiculo {
         this.matricula = matricula;
         this.categoria = categoria;
         this.annio = annio;
+        this.disponible = true; // Inicialmente, el vehículo está disponible
     }
 
     public String getMatricula() {
@@ -40,21 +42,24 @@ public abstract class Vehiculo {
         this.disponible = disponible;
     }
 
-    public abstract String getTipo();
-    
+
+    public String getTipo() {
+     String tipo = this.getClass().getSimpleName();
+     return tipo;
+    }
+
     //Serializamos
-    @Override 
-    public String toString() {
+     @Override
+     public String toString() {
         return new JSONObject(this).toString();
     }
 
-    //Deserializamos
-    public Vehiculo(String jsonString) {
-        JSONObject json = new JSONObject(jsonString);
-        this.matricula = json.getString("matricula");
-        this.categoria = Categoria.valueOf(json.getString("categoria"));
-        this.annio = json.getInt("annio");
-        this.disponible = json.getBoolean("disponible");
+         //Deserializamos
+     public Vehiculo(String jsonString) {
+       JSONObject json = new JSONObject(jsonString);
+       this.matricula = json.getString("matricula");
+       this.categoria = Categoria.valueOf(json.getString("categoria"));
+       this.annio = json.getInt("annio");
+       this.disponible = json.getBoolean("disponible");
     }
-
 }
