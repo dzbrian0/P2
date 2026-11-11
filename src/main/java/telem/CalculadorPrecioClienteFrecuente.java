@@ -1,4 +1,3 @@
-
 package telem;
 import java.time.LocalDate; //vi que esta clase es menos obsoleta
 import telem.GestorAlquileres;
@@ -39,6 +38,28 @@ int umbral = 3; //umbral de días para aplicar el descuento
            
 
             }
-                    
+                    public static void main(String[] args) {
+
+    Vehiculo vehiculo = new Turismo(
+        "ABC123", Categoria.NORMAL, 2020, 5, 400.0
+    );
+
+    Cliente cliente = new Cliente("Juan Pérez", "123456789");
+
+    Alquiler alquiler = new Alquiler(
+        vehiculo,
+        cliente,
+        LocalDate.of(2026, 5, 10),
+        LocalDate.of(2026, 5, 20)
+    );
+
+    CalculadorPrecioClienteFrecuente calculador =
+        new CalculadorPrecioClienteFrecuente();
+
+    System.out.println(
+        "Precio cliente frecuente: " +
+        calculador.calcularPrecioAlquiler(alquiler)
+    );
+}
 
 }

@@ -33,5 +33,28 @@ public class CalculadorPrecioOferton implements IcalculadorPrecio {
                       return alquilerActual;
 
               }
+
+              public static void main(String[] args) {
+
+    Vehiculo vehiculo = new Turismo(
+        "ABC123", Categoria.NORMAL, 2020, 5, 400.0
+    );
+
+    Cliente cliente = new Cliente("Juan Pérez", "123456789");
+
+    Alquiler alquiler = new Alquiler(
+        vehiculo,
+        cliente,
+        LocalDate.of(2026, 1, 10),
+        LocalDate.of(2026, 1, 20)
+    );
+
+    CalculadorPrecioOferton calculador =
+        new CalculadorPrecioOferton();
+
+    System.out.println(
+        "Precio con oferta: " + calculador.calcularPrecioAlquiler(alquiler)
+    );
+}
        
        }
